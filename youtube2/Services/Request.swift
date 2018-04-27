@@ -37,7 +37,6 @@ final class RequestService {
     func imageDownloader(url : String, completion: @escaping(UIImage?) -> Void) {
         guard let requestUrl = URL(string: url) else { return }
         let qos = DispatchQoS.background.qosClass
-        
         if let cached = cache.object(forKey: NSString(string: url)) { completion(cached); return }
         
         DispatchQueue.global(qos: qos).async{ [unowned self] in

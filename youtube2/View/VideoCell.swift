@@ -25,37 +25,37 @@ class VideoCell: BaseCell {
     
     var video: Video? {
         didSet {
-            if let title = video?.title {
-                titleLabel.text = title
+            guard let channelName = video?.channel?.name, let numberOfViews = video?.numberOfViews else { return }
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .decimal
+            subtitleTextView.text = "\(channelName) - \(numberFormatter.string(from: NSNumber(value: numberOfViews))!) views - 2 years ago"
+            guard let profileImageName = video?.channel?.profileImageName else { return }
+            RequestService.shared.imageDownloader(url: profileImageName) { image in
+                self.userProfileImageView.image = image
             }
-            if let thumbnailImageUrl = video?.thumbnailImageName {
-                loadingWheel.startAnimating()
-                RequestService.shared.imageDownloader(url: thumbnailImageUrl) { image in
-                    self.loadingWheel.stopAnimating()
-                    self.thumbNailImageView.image = image
-                }
+            
+            guard let thumbnailImageUrl = video?.thumbnailImageName else { return }
+            loadingWheel.startAnimating()
+            RequestService.shared.imageDownloader(url: thumbnailImageUrl) { image in
+                self.loadingWheel.stopAnimating()
+                self.thumbNailImageView.image = image
             }
-            if let profileImageName = video?.channel?.profileImageName {
-                RequestService.shared.imageDownloader(url: profileImageName) { image in
-                    self.userProfileImageView.image = image
-                }
+    
+            guard let title = video?.title else { return }
+            titleLabel.text = title
+            let size = CGSize(width: frame.width - 84, height: 1000)
+            let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+            let estimatedRect = NSString(string: title).boundingRect(with: size, options: options, attributes: [.font : UIFont.systemFont(ofSize: 14)], context: nil)
+            if (estimatedRect.size.height > 20) {
+                titleHeightConstant?.constant = 44
             }
-            if let channelName = video?.channel?.name, let numberOfViews = video?.numberOfViews {
-                let numberFormatter = NumberFormatter()
-                numberFormatter.numberStyle = .decimal
-                let subtitleText = "\(channelName) - \(numberFormatter.string(from: NSNumber(value: numberOfViews))!) views - 2 years ago"
-                subtitleTextView.text = subtitleText
-            }
-            if let title = video?.title {
-                let size = CGSize(width: frame.width - 84, height: 1000)
-                let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
-                let estimatedRect = NSString(string: title).boundingRect(with: size, options: options, attributes: [.font : UIFont.systemFont(ofSize: 14)], context: nil)
-                titleHeightConstant = estimatedRect.size.height > 20 ? 44 : 20
+            else {
+                titleHeightConstant?.constant = 20
             }
         }
     }
     
-    var titleHeightConstant: CGFloat?
+    var titleHeightConstant: NSLayoutConstraint?
     
     let loadingWheel: UIActivityIndicatorView = {
         let lw = UIActivityIndicatorView()
@@ -81,6 +81,7 @@ class VideoCell: BaseCell {
     
     let titleLabel: UILabel = {
         let label = UILabel()
+        label.textColor = .white
         label.numberOfLines = 2
         return label
     }()
@@ -89,13 +90,16 @@ class VideoCell: BaseCell {
         let textView = UITextView()
         textView.textContainerInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)
         textView.textColor = .lightGray
+        textView.backgroundColor = UIColor.rgb(red: 41, green: 43, blue: 54)
         textView.isEditable = false
+        textView.isSelectable = false
+        textView.isScrollEnabled = false
         return textView
     }()
     
     let separtorView : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+        view.backgroundColor = UIColor.rgb(red: 82, green: 82, blue: 82)
         return view
     }()
     
@@ -107,6 +111,7 @@ class VideoCell: BaseCell {
         addSubview(subtitleTextView)
         addSubview(loadingWheel)
         
+        
         thumbNailImageView.translatesAutoresizingMaskIntoConstraints = false
         separtorView.translatesAutoresizingMaskIntoConstraints = false
         userProfileImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -117,7 +122,7 @@ class VideoCell: BaseCell {
         thumbNailImageView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         thumbNailImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         thumbNailImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
-        thumbNailImageView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -90).isActive = true
+        thumbNailImageView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -102).isActive = true
         
         loadingWheel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         loadingWheel.widthAnchor.constraint(equalToConstant: 20).isActive = true
@@ -132,9 +137,8 @@ class VideoCell: BaseCell {
         titleLabel.leadingAnchor.constraint(equalTo: userProfileImageView.trailingAnchor, constant: 8).isActive = true
         titleLabel.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 8).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
-        if let value = titleHeightConstant {
-            titleLabel.heightAnchor.constraint(equalToConstant: value).isActive = true
-        }
+        titleHeightConstant = titleLabel.heightAnchor.constraint(equalToConstant: 20)
+        titleHeightConstant?.isActive = true
         subtitleTextView.leadingAnchor.constraint(equalTo: userProfileImageView.trailingAnchor, constant: 8).isActive = true
         subtitleTextView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4).isActive = true
         subtitleTextView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true

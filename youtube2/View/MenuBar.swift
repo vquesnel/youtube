@@ -41,7 +41,7 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! MenuCell
         
         cell.ImageView.image = UIImage(named: imageNames[indexPath.item])?.withRenderingMode(.alwaysTemplate)
-        cell.tintColor = UIColor.rgb(red: 91, green: 14, blue: 13)
+        cell.tintColor = UIColor.rgb(red: 41, green: 43, blue: 54)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -66,13 +66,13 @@ class MenuCell: BaseCell {
     
     override var isHighlighted: Bool {
         didSet {
-            ImageView.tintColor = isHighlighted ? .white : UIColor.rgb(red: 91, green: 14, blue: 13)
+            ImageView.tintColor = isHighlighted ? UIColor.rgb(red: 239, green: 240, blue: 241) : UIColor.rgb(red: 41, green: 43, blue: 54)
         }
     }
     
     override var isSelected: Bool {
         didSet {
-            ImageView.tintColor = isSelected ? .white : UIColor.rgb(red: 91, green: 14, blue: 13)
+            ImageView.tintColor = isSelected ? UIColor.rgb(red: 239, green: 240, blue: 241) : UIColor.rgb(red: 41, green: 43, blue: 54)
         }
     }
     
