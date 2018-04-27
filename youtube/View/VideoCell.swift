@@ -13,9 +13,8 @@ class BaseCell: UICollectionViewCell {
         super.init(frame: frame)
         setUpViews()
     }
-    func setUpViews() {
-        
-    }
+    
+    func setUpViews() {}
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("Init hasn't bee implemented ")
@@ -25,9 +24,11 @@ class BaseCell: UICollectionViewCell {
 class VideoCell: BaseCell {
     let thumbNailImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "clouds salar de uyuni")
+        imageView.image = UIImage(named: "background")
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.backgroundColor = .yellow
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -35,8 +36,10 @@ class VideoCell: BaseCell {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "IMG_3126")
         imageView.layer.cornerRadius = 22
-        imageView.layer.masksToBounds = true
-        
+        imageView.backgroundColor = .blue
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+
         return imageView
     }()
     
@@ -51,7 +54,7 @@ class VideoCell: BaseCell {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-        textView.textContainerInset = UIEdgeInsetsMake(0, -4, 0, 0)
+        textView.textContainerInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)
         textView.textColor = .lightGray
         textView.isEditable = false
         return textView
@@ -60,36 +63,40 @@ class VideoCell: BaseCell {
     let separtorView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    override func setUpViews(){
+    override func setUpViews() {
         addSubview(thumbNailImageView)
         addSubview(separtorView)
         addSubview(userProfileImageView)
         addSubview(titleLabel)
         addSubview(subtitleTextView)
         
-        addConstraintsWithFormat(format: "H:|-16-[v0]-16-|", views: thumbNailImageView)
-        addConstraintsWithFormat(format: "H:|-16-[v0(44)]", views: userProfileImageView)
-        addConstraintsWithFormat(format: "H:|[v0]|", views: separtorView)
+        thumbNailImageView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        thumbNailImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        thumbNailImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
+        thumbNailImageView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -90).isActive = true
         
+        userProfileImageView.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        userProfileImageView.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        userProfileImageView.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 8).isActive = true
+        userProfileImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         
-        //vertical constraints
-        addConstraintsWithFormat(format: "V:|-16-[v0]-8-[v1(44)]-16-[v2(1)]|", views: thumbNailImageView, userProfileImageView, separtorView)
+        titleLabel.leadingAnchor.constraint(equalTo: userProfileImageView.trailingAnchor, constant: 8).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 8).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
-        addConstraints([
-            NSLayoutConstraint(item: titleLabel, attribute: .top, relatedBy: .equal, toItem: thumbNailImageView, attribute: .bottom, multiplier: 1, constant: 8),
-            NSLayoutConstraint(item: titleLabel, attribute: .left, relatedBy: .equal, toItem: userProfileImageView, attribute: .right, multiplier: 1,  constant: 8),
-            NSLayoutConstraint(item: titleLabel, attribute: .right, relatedBy: .equal, toItem: thumbNailImageView, attribute: .right, multiplier: 1,  constant: 0),
-            NSLayoutConstraint(item: titleLabel, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0,  constant: 20)
-            ])
-
-        addConstraints([
-            NSLayoutConstraint(item: subtitleTextView, attribute: .top, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1, constant: 4),
-            NSLayoutConstraint(item: subtitleTextView, attribute: .left, relatedBy: .equal, toItem: userProfileImageView, attribute: .right, multiplier: 1,  constant: 8),
-            NSLayoutConstraint(item: subtitleTextView, attribute: .right, relatedBy: .equal, toItem: thumbNailImageView, attribute: .right, multiplier: 1,  constant: 0),
-            NSLayoutConstraint(item: subtitleTextView, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0,  constant: 30)
-            ])
+        subtitleTextView.leadingAnchor.constraint(equalTo: userProfileImageView.trailingAnchor, constant: 8).isActive = true
+        subtitleTextView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4).isActive = true
+        subtitleTextView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        subtitleTextView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        separtorView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor).isActive = true
+        separtorView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor).isActive = true
+        separtorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        separtorView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1).isActive = true
     }
 }

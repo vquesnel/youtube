@@ -27,13 +27,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //get rid of black bar underneath nav bar
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-        
-        let statusBarBackgroundView = UIView()
-        statusBarBackgroundView.backgroundColor = UIColor.rgb(red: 194, green: 31, blue: 31)
-        
-        window?.addSubview(statusBarBackgroundView)
-        window?.addConstraintsWithFormat(format: "H:|[v0]|", views: statusBarBackgroundView)
-        window?.addConstraintsWithFormat(format: "V:|[v0(20)]", views: statusBarBackgroundView)
+//        
+//        let statusBarBackgroundView = UIView()
+//        statusBarBackgroundView.backgroundColor = UIColor.rgb(red: 194, green: 31, blue: 31)
+//        statusBarBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+//        window?.addSubview(statusBarBackgroundView)
+//        statusBarBackgroundView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
+//        statusBarBackgroundView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+
         return true
     }
 

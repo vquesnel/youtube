@@ -13,6 +13,7 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.translatesAutoresizingMaskIntoConstraints = false
         cv.backgroundColor = UIColor.rgb(red: 230, green: 32, blue: 31)
         cv.dataSource = self
         cv.delegate = self
@@ -26,11 +27,11 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
         
         collectionView.register(MenuCell.self, forCellWithReuseIdentifier: "cellId")
         addSubview(collectionView)
-        addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
-        addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView)
         
-        let selectedIndexPath = NSIndexPath(item: 0, section: 0)
-        collectionView.selectItem(at: selectedIndexPath as IndexPath, animated: false, scrollPosition: [])
+        let selectedIndexPath = IndexPath(item: 0, section: 0)
+        collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
+        collectionView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        collectionView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -61,6 +62,8 @@ class MenuCell: BaseCell {
     
     let ImageView: UIImageView = {
         let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+
         return iv
     }()
     
@@ -77,14 +80,10 @@ class MenuCell: BaseCell {
     }
     
     override func setUpViews() {
-        super.setUpViews()
         addSubview(ImageView)
-        addConstraintsWithFormat(format: "H:[v0(28)]", views: ImageView)
-        addConstraintsWithFormat(format: "V:[v0(28)]", views: ImageView)
-        
-        addConstraints([
-            NSLayoutConstraint(item: ImageView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: ImageView, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0)
-        ])
+        ImageView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor).isActive = true
+        ImageView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
+        ImageView.widthAnchor.constraint(equalToConstant: 28).isActive = true
+        ImageView.heightAnchor.constraint(equalToConstant: 28).isActive = true
     }
 }
