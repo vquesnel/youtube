@@ -15,7 +15,7 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = UIColor(red: 216, green: 216, blue: 216)
+        cv.backgroundColor = UIColor.rgb(red: 216, green: 216, blue: 216)
         cv.layer.cornerRadius = 16
         cv.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         return cv
