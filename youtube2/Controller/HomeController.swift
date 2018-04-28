@@ -20,18 +20,20 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         titleLabel.font = UIFont.systemFont(ofSize: 20.0)
         navigationItem.titleView = titleLabel
         navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.shadowImage = UIImage()
         collectionView?.backgroundColor = UIColor.rgb(red: 41, green: 43, blue: 54)
         collectionView?.register(VideoCell.self, forCellWithReuseIdentifier: "mainCellId")
         collectionView?.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
-        downloadVideos()
         setUpMenubar()
         setUpNavbar()
+        downloadVideos()
     }
     
     let menuBar: MenuBar  = {
         let mb = MenuBar()
         mb.translatesAutoresizingMaskIntoConstraints = false
+
         return mb
     }()
     
@@ -59,12 +61,15 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         navigationItem.rightBarButtonItems = [moreButton, searchButtonItem]
     }
     
-    @objc func handleSearch() {
-        print (123)
-    }
+    let settingsLauncher = SettingsLauncher()
     
+    @objc func handleSearch() {
+        print("search")
+    }
+
+
     @objc func handleMore() {
-        print(234)
+        settingsLauncher.showSettings()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -81,7 +86,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let height = (view.frame.width - 32) * 9 / 16
-        return CGSize(width: view.frame.width, height: height + 16 + 8 + 44 + 36)
+        return CGSize(width: view.frame.width, height: height + 16 + 8 + 44 + 12 + 36 + 10)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

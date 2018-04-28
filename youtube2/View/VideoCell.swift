@@ -33,6 +33,7 @@ class VideoCell: BaseCell {
             RequestService.shared.imageDownloader(url: profileImageName) { image in
                 self.userProfileImageView.image = image
             }
+            subtitleTextView.backgroundColor = UIColor.rgb(red: 41, green: 43, blue: 54)
             
             guard let thumbnailImageUrl = video?.thumbnailImageName else { return }
             loadingWheel.startAnimating()
@@ -43,15 +44,11 @@ class VideoCell: BaseCell {
     
             guard let title = video?.title else { return }
             titleLabel.text = title
+            titleLabel.backgroundColor = UIColor.rgb(red: 41, green: 43, blue: 54)
             let size = CGSize(width: frame.width - 84, height: 1000)
             let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
             let estimatedRect = NSString(string: title).boundingRect(with: size, options: options, attributes: [.font : UIFont.systemFont(ofSize: 14)], context: nil)
-            if (estimatedRect.size.height > 20) {
-                titleHeightConstant?.constant = 44
-            }
-            else {
-                titleHeightConstant?.constant = 20
-            }
+            titleHeightConstant?.constant = estimatedRect.size.height > 20 ? 44 : 20
         }
     }
     
@@ -68,6 +65,8 @@ class VideoCell: BaseCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 5
+        imageView.backgroundColor = UIColor.rgb(red: 30, green: 30, blue: 30)
         return imageView
     }()
     
@@ -76,6 +75,7 @@ class VideoCell: BaseCell {
         imageView.layer.cornerRadius = 22
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = UIColor.rgb(red: 30, green: 30, blue: 30)
         return imageView
     }()
     
@@ -83,6 +83,7 @@ class VideoCell: BaseCell {
         let label = UILabel()
         label.textColor = .white
         label.numberOfLines = 2
+        label.backgroundColor = UIColor.rgb(red: 30, green: 30, blue: 30)
         return label
     }()
     
@@ -90,16 +91,16 @@ class VideoCell: BaseCell {
         let textView = UITextView()
         textView.textContainerInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)
         textView.textColor = .lightGray
-        textView.backgroundColor = UIColor.rgb(red: 41, green: 43, blue: 54)
         textView.isEditable = false
         textView.isSelectable = false
         textView.isScrollEnabled = false
+        textView.backgroundColor = UIColor.rgb(red: 30, green: 30, blue: 30)
         return textView
     }()
     
     let separtorView : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.rgb(red: 82, green: 82, blue: 82)
+        view.backgroundColor =  UIColor.rgb(red: 30, green: 30, blue: 30)
         return view
     }()
     
@@ -121,21 +122,21 @@ class VideoCell: BaseCell {
         
         thumbNailImageView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         thumbNailImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        thumbNailImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
+        thumbNailImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 26).isActive = true
         thumbNailImageView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -102).isActive = true
         
         loadingWheel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         loadingWheel.widthAnchor.constraint(equalToConstant: 20).isActive = true
         loadingWheel.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor).isActive = true
-        loadingWheel.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
+        loadingWheel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 110).isActive = true
         
         userProfileImageView.heightAnchor.constraint(equalToConstant: 44).isActive = true
         userProfileImageView.widthAnchor.constraint(equalToConstant: 44).isActive = true
-        userProfileImageView.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 8).isActive = true
+        userProfileImageView.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 14).isActive = true
         userProfileImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         
         titleLabel.leadingAnchor.constraint(equalTo: userProfileImageView.trailingAnchor, constant: 8).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 8).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 12).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         titleHeightConstant = titleLabel.heightAnchor.constraint(equalToConstant: 20)
         titleHeightConstant?.isActive = true
