@@ -17,7 +17,6 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
         cv.layer.cornerRadius = 16
-        cv.isScrollEnabled = false
         cv.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         return cv
     }()
@@ -34,6 +33,7 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
     }()
     
     let cellHeight = 50
+    var isActive = false
     
     @objc func showSettings() {
         guard let window = UIApplication.shared.keyWindow else { return }
@@ -41,7 +41,7 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
         blackBlur.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
         window.addSubview(blackBlur)
         window.addSubview(collectionView)
-        
+        isActive = true
         let height: CGFloat = CGFloat(settings.count * cellHeight)
         let y = window.frame.height - height
         collectionView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: height)
@@ -49,11 +49,24 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
         blackBlur.alpha = 0
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.blackBlur.alpha = 1
-            self.collectionView.frame = CGRect(x: self.collectionView.frame.minX, y: y, width: self.collectionView.frame.width, height: self.collectionView.frame.height)
+            self.collectionView.frame = CGRect(x: self.collectionView.frame.minX, y: y, width: window.frame.width, height: height)
         }, completion: nil)
     }
+    
+    func updateSettings() {
+        guard let window = UIApplication.shared.keyWindow else { return }
+        window.addSubview(blackBlur)
+        window.addSubview(collectionView)
+        let height: CGFloat = CGFloat(settings.count * cellHeight)
+        let y = window.frame.height - height
+        blackBlur.frame = window.frame
+        blackBlur.alpha = isActive ? 1 : 0
+        collectionView.frame = isActive ? CGRect(x: collectionView.frame.minX, y: y, width: window.frame.width, height: height) :CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: height)
+    }
+    
 
     @objc func handleDismiss() {
+        isActive = false
         UIView.animate(withDuration: 0.5) {
             self.blackBlur.alpha = 0
             guard let window = UIApplication.shared.keyWindow else { return }

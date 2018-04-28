@@ -21,7 +21,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         navigationItem.titleView = titleLabel
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.shadowImage = UIImage()
-        collectionView?.backgroundColor = UIColor.rgb(red: 41, green: 43, blue: 54)
+        collectionView?.backgroundColor = UIColor.rgb(red: 36, green: 36, blue: 36)
         collectionView?.register(VideoCell.self, forCellWithReuseIdentifier: "mainCellId")
         collectionView?.contentInset = UIEdgeInsets(top: 41, left: 0, bottom: 0, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 41, left: 0, bottom: 0, right: 0)
@@ -97,6 +97,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         coordinator.animate(alongsideTransition: { [unowned self] _ in
             self.collectionView?.collectionViewLayout.invalidateLayout()
             self.settingsLauncher.collectionView.collectionViewLayout.invalidateLayout()
+            self.settingsLauncher.updateSettings()
             self.menuBar.collectionView.collectionViewLayout.invalidateLayout()
             }, completion: nil)
     }

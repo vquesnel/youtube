@@ -14,10 +14,15 @@ class SettingCell: BaseCell {
     
     var setting: Setting? {
         didSet {
-            guard let name = setting?.name, let imageName = setting?.imageName, let color = setting?.color else { return }
+            guard let name = setting?.name, let imageName = setting?.imageName else { return }
             nameLabel.text = name
             IconImageView.image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
-            self.color = color
+            if let color = setting?.color  {
+                self.color = color
+            }
+            else {
+                self.color = .white
+            }
             backgroundColor = color
         }
     }
@@ -46,6 +51,10 @@ class SettingCell: BaseCell {
         return icon
     }()
     
+    @objc func handleTap() {
+        backgroundColor = UIColor.rgb(red: 230, green: 32, blue: 31)
+    }
+    
     override func setUpViews() {
         super.setUpViews()
         
@@ -63,5 +72,6 @@ class SettingCell: BaseCell {
         nameLabel.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         nameLabel.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: IconImageView.trailingAnchor, constant: 14).isActive = true
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
 }

@@ -33,7 +33,7 @@ class VideoCell: BaseCell {
             RequestService.shared.imageDownloader(url: profileImageName) { image in
                 self.userProfileImageView.image = image
             }
-            subtitleTextView.backgroundColor = UIColor.rgb(red: 41, green: 43, blue: 54)
+            subtitleTextView.backgroundColor = UIColor.rgb(red: 36, green: 36, blue: 36)
             
             guard let thumbnailImageUrl = video?.thumbnailImageName else { return }
             loadingWheel.startAnimating()
@@ -44,7 +44,7 @@ class VideoCell: BaseCell {
     
             guard let title = video?.title else { return }
             titleLabel.text = title
-            titleLabel.backgroundColor = UIColor.rgb(red: 41, green: 43, blue: 54)
+            titleLabel.backgroundColor = UIColor.rgb(red: 36, green: 36, blue: 36)
             let size = CGSize(width: frame.width - 84, height: 1000)
             let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
             let estimatedRect = NSString(string: title).boundingRect(with: size, options: options, attributes: [.font : UIFont.systemFont(ofSize: 14)], context: nil)
