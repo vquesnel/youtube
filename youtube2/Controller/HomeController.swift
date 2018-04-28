@@ -23,8 +23,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         navigationController?.navigationBar.shadowImage = UIImage()
         collectionView?.backgroundColor = UIColor.rgb(red: 41, green: 43, blue: 54)
         collectionView?.register(VideoCell.self, forCellWithReuseIdentifier: "mainCellId")
-        collectionView?.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
-        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
+        collectionView?.contentInset = UIEdgeInsets(top: 41, left: 0, bottom: 0, right: 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 41, left: 0, bottom: 0, right: 0)
         setUpMenubar()
         setUpNavbar()
         downloadVideos()
@@ -33,9 +33,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     let menuBar: MenuBar  = {
         let mb = MenuBar()
         mb.translatesAutoresizingMaskIntoConstraints = false
-
         return mb
     }()
+    
+    let settingsLauncher = SettingsLauncher()
     
     func   downloadVideos() {
         guard let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json") else { return }
@@ -52,7 +53,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         menuBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         menuBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        menuBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        menuBar.heightAnchor.constraint(equalToConstant: 41).isActive = true
     }
     
     private func setUpNavbar() {
@@ -60,8 +61,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let moreButton = UIBarButtonItem(image: UIImage(named: "more")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleMore))
         navigationItem.rightBarButtonItems = [moreButton, searchButtonItem]
     }
-    
-    let settingsLauncher = SettingsLauncher()
     
     @objc func handleSearch() {
         print("search")
@@ -97,6 +96,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         super.willTransition(to: newCollection, with: coordinator)
         coordinator.animate(alongsideTransition: { [unowned self] _ in
             self.collectionView?.collectionViewLayout.invalidateLayout()
+            self.settingsLauncher.collectionView.collectionViewLayout.invalidateLayout()
             self.menuBar.collectionView.collectionViewLayout.invalidateLayout()
             }, completion: nil)
     }

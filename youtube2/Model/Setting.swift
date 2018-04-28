@@ -11,9 +11,11 @@ import UIKit
 class Setting: NSObject {
     let name: String
     let imageName: String
+    let color: UIColor?
     
-    init(name: String, imageName: String) {
+    init(name: String, imageName: String, color: UIColor?) {
         self.name = name
         self.imageName = imageName
+        self.color = color
     }
 }

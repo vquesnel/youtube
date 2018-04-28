@@ -14,9 +14,11 @@ class SettingCell: BaseCell {
     
     var setting: Setting? {
         didSet {
-            guard let name = setting?.name, let imageName = setting?.imageName else { return }
+            guard let name = setting?.name, let imageName = setting?.imageName, let color = setting?.color else { return }
             nameLabel.text = name
-            IconImageView.image = UIImage(named:  imageName)?.withRenderingMode(.alwaysTemplate)
+            IconImageView.image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            self.color = color
+            backgroundColor = color
         }
     }
     
@@ -56,7 +58,7 @@ class SettingCell: BaseCell {
         IconImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 14).isActive = true
         IconImageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
         IconImageView.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        IconImageView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
+        IconImageView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         
         nameLabel.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         nameLabel.widthAnchor.constraint(equalTo: widthAnchor).isActive = true

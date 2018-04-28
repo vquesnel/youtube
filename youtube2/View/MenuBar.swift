@@ -83,8 +83,8 @@ class MenuCell: BaseCell {
         ImageView.translatesAutoresizingMaskIntoConstraints = false
         ImageView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor).isActive = true
         ImageView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
-        ImageView.widthAnchor.constraint(equalToConstant: 28).isActive = true
-        ImageView.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        ImageView.widthAnchor.constraint(equalToConstant: 23).isActive = true
+        ImageView.heightAnchor.constraint(equalToConstant: 23).isActive = true
     }
 }
 

@@ -24,12 +24,12 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
     
     let settings: [Setting] = {
        return [
-        Setting(name: "Settings", imageName: "settings"),
-        Setting(name: "Terms & privacy policy", imageName: "privacy"),
-        Setting(name: "Send Feedback", imageName: "feedback"),
-        Setting(name: "Help", imageName: "help"),
-        Setting(name: "Switch Account", imageName: "switch"),
-        Setting(name: "Cancel", imageName: "cancel")
+        Setting(name: "Settings", imageName: "settings", color: nil),
+        Setting(name: "Terms & privacy policy", imageName: "privacy", color:  UIColor.rgb(red: 239, green: 240, blue: 241)),
+        Setting(name: "Send Feedback", imageName: "feedback", color: nil),
+        Setting(name: "Help", imageName: "help",  color: UIColor.rgb(red: 239, green: 240, blue: 241)),
+        Setting(name: "Switch Account", imageName: "switch",  color: nil),
+        Setting(name: "Cancel", imageName: "cancel", color: UIColor.rgb(red: 239, green: 240, blue: 241))
         ]
     }()
     
@@ -69,14 +69,6 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! SettingCell
         
         let setting = settings[indexPath.item]
-        if (indexPath.item % 2 == 0 ) {
-            cell.backgroundColor = UIColor.rgb(red: 239, green: 240, blue: 241)
-            cell.color = cell.backgroundColor
-        }
-        else {
-            cell.backgroundColor = .white
-            cell.color = .white
-        }
         cell.setting = setting
         return cell
 
@@ -92,10 +84,8 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
     
     override init() {
         super.init()
-        
         collectionView.dataSource = self
         collectionView.delegate = self
-
         collectionView.register(SettingCell.self, forCellWithReuseIdentifier: "cellId")
     }
 }
