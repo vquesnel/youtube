@@ -15,8 +15,9 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = UIColor.rgb(red: 216, green: 216, blue: 216)
+        cv.backgroundColor = .white
         cv.layer.cornerRadius = 16
+        cv.isScrollEnabled = false
         cv.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         return cv
     }()
@@ -68,6 +69,14 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! SettingCell
         
         let setting = settings[indexPath.item]
+        if (indexPath.item % 2 == 0 ) {
+            cell.backgroundColor = UIColor.rgb(red: 239, green: 240, blue: 241)
+            cell.color = cell.backgroundColor
+        }
+        else {
+            cell.backgroundColor = .white
+            cell.color = .white
+        }
         cell.setting = setting
         return cell
 

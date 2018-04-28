@@ -10,6 +10,8 @@ import UIKit
 
 class SettingCell: BaseCell {
     
+    var color: UIColor?
+    
     var setting: Setting? {
         didSet {
             guard let name = setting?.name, let imageName = setting?.imageName else { return }
@@ -20,15 +22,16 @@ class SettingCell: BaseCell {
     
     override var isHighlighted: Bool {
         didSet {
-            backgroundColor = isHighlighted ? .darkGray :  UIColor.rgb(red: 216, green: 216, blue: 216)
-            IconImageView.tintColor = isHighlighted ?  UIColor.rgb(red: 216, green: 216, blue: 216) : .darkGray
-            nameLabel.textColor = isHighlighted ? UIColor.rgb(red: 216, green: 216, blue: 216) : .darkGray
+            backgroundColor = isHighlighted ? UIColor.rgb(red: 230, green: 32, blue: 31) : color
+            IconImageView.tintColor = isHighlighted ?  .white : .lightGray
+            nameLabel.textColor = isHighlighted ? .white : .lightGray
         }
     }
+    
     let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Settings"
-        label.textColor = .darkGray
+        label.textColor = .lightGray
         label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
@@ -36,7 +39,7 @@ class SettingCell: BaseCell {
     let IconImageView: UIImageView = {
         let icon = UIImageView()
         icon.image = UIImage(named: "settings")?.withRenderingMode(.alwaysTemplate)
-        icon.tintColor = .darkGray
+        icon.tintColor = .lightGray
         icon.contentMode = .scaleAspectFill
         return icon
     }()
@@ -50,13 +53,13 @@ class SettingCell: BaseCell {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         IconImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        IconImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 8).isActive = true
-        IconImageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        IconImageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        IconImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 14).isActive = true
+        IconImageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        IconImageView.widthAnchor.constraint(equalToConstant: 20).isActive = true
         IconImageView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
         
         nameLabel.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         nameLabel.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
-        nameLabel.leadingAnchor.constraint(equalTo: IconImageView.trailingAnchor, constant: 8).isActive = true
+        nameLabel.leadingAnchor.constraint(equalTo: IconImageView.trailingAnchor, constant: 14).isActive = true
     }
 }
