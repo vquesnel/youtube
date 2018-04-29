@@ -15,12 +15,13 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func viewDidLoad() {
         super.viewDidLoad()
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width - 32, height: view.frame.height))
-        titleLabel.text = "Home"
-        titleLabel.textColor = UIColor.rgb(red: 239, green: 240, blue: 241)
+        titleLabel.text = "  Home"
+        titleLabel.textColor = UIColor.rgb(red: 192, green: 192, blue: 193)
         titleLabel.font = UIFont.systemFont(ofSize: 20.0)
         navigationItem.titleView = titleLabel
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.tintColor = UIColor.rgb(red: 192, green: 192, blue: 193)
         collectionView?.backgroundColor = UIColor.rgb(red: 36, green: 36, blue: 36)
         collectionView?.register(VideoCell.self, forCellWithReuseIdentifier: "mainCellId")
         collectionView?.contentInset = UIEdgeInsets(top: 41, left: 0, bottom: 0, right: 0)
@@ -36,7 +37,11 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return mb
     }()
     
-    let settingsLauncher = SettingsLauncher()
+    lazy var settingsLauncher: SettingsLauncher = {
+       let launcher = SettingsLauncher()
+        launcher.homeController = self
+        return launcher
+    }()
     
     func   downloadVideos() {
         guard let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json") else { return }
@@ -49,16 +54,27 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     private func setUpMenubar() {
+        navigationController?.hidesBarsOnSwipe = true
+        let redView = UIView()
+        redView.backgroundColor = UIColor.rgb(red: 230, green: 32, blue: 31)
+        view.addSubview(redView)
         view.addSubview(menuBar)
-        menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        menuBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        menuBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        
+        redView.layer.cornerRadius = 16
+        redView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        redView.translatesAutoresizingMaskIntoConstraints = false
+        redView.topAnchor.constraint(equalTo: view.topAnchor, constant: -4).isActive = true
+        redView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        redView.heightAnchor.constraint(equalToConstant: 41).isActive = true
+        
+        menuBar.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         menuBar.heightAnchor.constraint(equalToConstant: 41).isActive = true
+        menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
     }
     
     private func setUpNavbar() {
-        let searchButtonItem = UIBarButtonItem(image: UIImage(named: "search")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleSearch))
-        let moreButton = UIBarButtonItem(image: UIImage(named: "more")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleMore))
+        let searchButtonItem = UIBarButtonItem(image: UIImage(named: "search")?.withRenderingMode(.alwaysTemplate), style: .plain, target: self, action: #selector(handleSearch))
+        let moreButton = UIBarButtonItem(image: UIImage(named: "more")?.withRenderingMode(.alwaysTemplate), style: .plain, target: self, action: #selector(handleMore))
         navigationItem.rightBarButtonItems = [moreButton, searchButtonItem]
     }
     
@@ -69,6 +85,15 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
 
     @objc func handleMore() {
         settingsLauncher.showSettings()
+    }
+    
+    func showControllerForSetting(setting: Setting) {
+        let settingsControllerView = UIViewController()
+        settingsControllerView.view.backgroundColor = UIColor.rgb(red: 36, green: 36, blue: 36)
+        settingsControllerView.navigationItem.title = setting.name.rawValue
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.rgb(red: 192, green: 192, blue: 193)]
+        navigationController?.navigationBar.tintColor = UIColor.rgb(red: 192, green: 192, blue: 193)
+        navigationController?.pushViewController(settingsControllerView, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
