@@ -18,8 +18,6 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
         cv.backgroundColor = UIColor.rgb(red: 230, green: 32, blue: 31)
         cv.dataSource = self
         cv.delegate = self
-        cv.layer.cornerRadius = 16
-        cv.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         return cv
     }()
     let cellId = "cellId"
@@ -33,13 +31,14 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         let selectedIndexPath = IndexPath(item: 0, section: 0)
         collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: [])
-        collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
-        collectionView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalTo: safeAreaLayoutGuide.heightAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        collectionView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
+        collectionView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         setupHorizontalBar()
     }
     
     var horizontalBarLeftAnchorConstraint: NSLayoutConstraint?
+    
     func setupHorizontalBar() {
         let horizontalBar = UIView()
         horizontalBar.backgroundColor = UIColor.rgb(red: 192, green: 192, blue: 193)
@@ -52,6 +51,12 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
         horizontalBar.heightAnchor.constraint(equalToConstant: 3).isActive = true
     }
     
+    func updateConstraints(x: CGFloat) {
+        guard let window = UIApplication.shared.keyWindow else { return }
+        if ( x != 0) {
+            horizontalBarLeftAnchorConstraint?.constant = window.frame.width * x
+        }
+    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 4
     }
@@ -101,6 +106,7 @@ class MenuCell: BaseCell {
     }
     
     override func setUpViews() {
+        ImageView.clipsToBounds = true
         addSubview(ImageView)
         ImageView.translatesAutoresizingMaskIntoConstraints = false
         ImageView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor).isActive = true

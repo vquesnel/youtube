@@ -29,7 +29,7 @@ class SettingCell: BaseCell {
     
     override var isHighlighted: Bool {
         didSet {
-            backgroundColor = isHighlighted ? UIColor.rgb(red: 230, green: 32, blue: 31) : color
+            backgroundColor = isHighlighted ? UIColor.rgb(red: 192, green: 192, blue: 193) : color
             IconImageView.tintColor = isHighlighted ?  .white : .lightGray
             nameLabel.textColor = isHighlighted ? .white : UIColor.rgb(red: 192, green: 192, blue: 193)
         }

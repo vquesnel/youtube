@@ -8,19 +8,6 @@
 
 import UIKit
 
-class BaseCell: UICollectionViewCell {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setUpViews()
-    }
-    
-    func setUpViews() {}
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("Init hasn't bee implemented ")
-    }
-    
-}
 class VideoCell: BaseCell {
     
     var video: Video? {
@@ -145,8 +132,7 @@ class VideoCell: BaseCell {
         subtitleTextView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         subtitleTextView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        separtorView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor).isActive = true
-        separtorView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor).isActive = true
+        separtorView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
         separtorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
         separtorView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1).isActive = true
     }
