@@ -10,7 +10,10 @@ import UIKit
 
 class SubscriptionCell: FeedCell {
     
-    override lazy var urlString: String = {
-       return "subscriptions.json"
-    }()
+    override var urlString: String  {
+        get {
+            return "subscriptions.json"
+        }
+        set { }
+    }
 }

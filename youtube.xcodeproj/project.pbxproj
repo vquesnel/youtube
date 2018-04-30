@@ -94,6 +94,7 @@
 		27B374AC20932F4900D92765 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				27F1EB81209735AF00CC83A8 /* VideoLauncher.swift */,
 				27B3749C20932EF000D92765 /* HomeController.swift */,
 				57055A1B2094944900708FDF /* SettingsLauncher.swift */,
 			);
@@ -104,7 +105,6 @@
 			isa = PBXGroup;
 			children = (
 				27B374B020932F7F00D92765 /* Extensions.swift */,
-				27F1EB81209735AF00CC83A8 /* VideoLauncher.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -344,7 +344,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7CT92MF359;
 				INFOPLIST_FILE = youtube2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -360,7 +360,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7CT92MF359;
 				INFOPLIST_FILE = youtube2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

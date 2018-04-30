@@ -76,12 +76,7 @@ class VideoPlayerView: UIView {
         videoLengthLabel.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         videoLengthLabel.widthAnchor.constraint(equalToConstant: 60).isActive = true
         videoLengthLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        
-        controlsContainerView.addSubview(slider)
-        slider.rightAnchor.constraint(equalTo: videoLengthLabel.leftAnchor).isActive = true
-        slider.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        slider.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        slider.heightAnchor.constraint(equalToConstant: 20).isActive = true
+
 
         controlsContainerView.addSubview(PausePlayButton)
         PausePlayButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
@@ -94,7 +89,7 @@ class VideoPlayerView: UIView {
 
     
     private func setUpPlayerView() {
-        let urlString = "https://firebasestorage.googleapis.com/v0/b/gameofchats-762ca.appspot.com/o/message_movies%2F12323439-9729-4941-BA07-2BAE970967C7.mov?alt=media&token=3e37a093-3bc8-410f-84d3-38332af9c726"
+        let urlString = "https://firebasestorage.googleapis.com/v0/b/fir-f5697.appspot.com/o/IMG_1171.m4v?alt=media&token=7cda5edc-dc71-4b2f-ad50-4703f16a2a8d"
         
         guard let url = URL(string: urlString) else { return }
         player = AVPlayer(url: url)
@@ -138,13 +133,20 @@ class VideoPlayerView: UIView {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "currentItem.loadedTimeRanges" {
             loadingWheel.stopAnimating()
+            
+            controlsContainerView.addSubview(slider)
+            slider.rightAnchor.constraint(equalTo: videoLengthLabel.leftAnchor).isActive = true
+            slider.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+            slider.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+            slider.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            
             controlsContainerView.backgroundColor = .clear
             PausePlayButton.isHidden = false
             isPlaying = true
             
             guard let duration = player?.currentItem?.duration else { return }
             let seconds = CMTimeGetSeconds(duration)
-            let secondsText = Int(seconds.truncatingRemainder(dividingBy: 60))
+            let secondsText = String(format: "%02d", Int(seconds.truncatingRemainder(dividingBy: 60)))
             let minutesText = String(format: "%02d", Int(seconds) / 60)
             videoLengthLabel.text = "\(minutesText):\(secondsText)"
         }

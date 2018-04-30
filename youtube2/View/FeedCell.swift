@@ -19,9 +19,7 @@ class FeedCell : BaseCell, UICollectionViewDataSource, UICollectionViewDelegate,
     
     var baseUrl: String = "https://s3-us-west-2.amazonaws.com/youtubeassets/"
     
-    lazy var urlString: String = {
-        return "home.json"
-    }()
+    lazy var urlString: String = "home.json"
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()

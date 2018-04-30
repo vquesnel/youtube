@@ -9,8 +9,11 @@
 import UIKit
 
 class TrendingCell: FeedCell {
-  
-    override lazy var urlString: String = {
-        return "trending.json"
-    }()
+    
+    override var urlString: String  {
+        get {
+            return "trending.json"
+        }
+        set { }
+    }
 }
