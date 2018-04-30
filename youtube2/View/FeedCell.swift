@@ -17,6 +17,12 @@ class FeedCell : BaseCell, UICollectionViewDataSource, UICollectionViewDelegate,
         return frame.width
     }()
     
+    var baseUrl: String = "https://s3-us-west-2.amazonaws.com/youtubeassets/"
+    
+    lazy var urlString: String = {
+        return "home.json"
+    }()
+    
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -37,11 +43,11 @@ class FeedCell : BaseCell, UICollectionViewDataSource, UICollectionViewDelegate,
         collectionView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor).isActive = true
         collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true
-        downloadVideos()
+        downloadVideos(urlString: self.urlString)
     }
     
-    func   downloadVideos() {
-        guard let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json") else { return }
+    func   downloadVideos(urlString: String) {
+        guard let url = URL(string: "\(baseUrl)\(urlString)") else { return }
         let request = URLRequest(url: url)
         RequestService.shared.get(req: request, for: [Video].self) { data in
             guard let data = data else { return }

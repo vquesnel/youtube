@@ -16,18 +16,15 @@ final class RequestService {
     func get<T: Decodable>(req: URLRequest, for type: T.Type, completion: @escaping(T?) -> Void) {
         URLSession.shared.dataTask(with: req) { data, res, err in
             guard err == nil else {
-                DispatchQueue.main.async { completion(nil) }
-                print("DataService : \(String(describing: err))")
+                self.printError(error: "DataService : \(String(describing: err))", completion: completion)
                 return
             }
             guard let getData = data else {
-                DispatchQueue.main.async { completion(nil) }
-                print("DataService : Data Not Recieved")
+                self.printError(error: "DataService : Data Not Recieved", completion: completion)
                 return
             }
             guard let JSONData = try? JSONDecoder().decode(T.self, from: getData) else {
-                DispatchQueue.main.async { completion(nil) }
-                print("DataService : Fetching From Data to Model failed")
+                self.printError(error: "DataService : Fetching From Data to Model failed", completion: completion)
                 return
             }
             DispatchQueue.main.async { completion(JSONData) }
@@ -47,5 +44,11 @@ final class RequestService {
             self.cache.setObject(image, forKey: NSString(string: url))
             DispatchQueue.main.async { completion(image) }
         }
+    }
+    
+    func printError<T>(error: String, completion: @escaping(T?) -> Void) {
+        print(error)
+        DispatchQueue.main.async { completion(nil) }
+        return
     }
 }

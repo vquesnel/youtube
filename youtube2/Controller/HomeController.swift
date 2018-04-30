@@ -12,11 +12,11 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     let cellId = "cellId"
     
-    let titles = ["Home", "Trending", "Subscriptions", "Account"]
+    let trendingCellId = "trendingCellId"
     
-    var scrollPosition: CGFloat = {
-        return 0
-    }()
+    let subscriptionCellId = "subscriptionCellId"
+    
+    let titles = ["Home", "Trending", "Subscriptions", "Account"]
     
     lazy var menuBar: MenuBar  = {
         let mb = MenuBar()
@@ -46,13 +46,13 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         super.viewDidLoad()
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width - 32, height: view.frame.height))
         titleLabel.text = "  Home"
-        titleLabel.textColor = UIColor.rgb(red: 192, green: 192, blue: 193)
+        titleLabel.textColor = .white
         titleLabel.font = UIFont.systemFont(ofSize: 20.0)
         navigationItem.titleView = titleLabel
         navigationController?.hidesBarsOnSwipe = true
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.tintColor = UIColor.rgb(red: 192, green: 192, blue: 193)
+        navigationController?.navigationBar.tintColor = .white
         setUpCollectionView()
         setUpMenubar()
         setUpNavbar()
@@ -64,6 +64,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         flowLayout.minimumLineSpacing = 0
         collectionView?.backgroundColor = UIColor.rgb(red: 36, green: 36, blue: 36)
         collectionView?.register(FeedCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView?.register(TrendingCell.self, forCellWithReuseIdentifier: trendingCellId)
+        collectionView?.register(SubscriptionCell.self, forCellWithReuseIdentifier: subscriptionCellId)
         collectionView?.contentInset = UIEdgeInsets(top: 41, left: 0, bottom: 0, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 41, left: 0, bottom: 0, right: 0)
         collectionView?.isPagingEnabled = true
@@ -104,15 +106,15 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         scrollWillEndingX = CGFloat(menuIndex)
         let indexPath = IndexPath(item: menuIndex, section: 0)
         collectionView?.scrollToItem(at: indexPath, at: [], animated: true )
-        changeTitle(index: menuIndex)
+        changeTitle(index: Int(scrollWillEndingX))
     }
     
     func showControllerForSetting(setting: Setting) {
         let settingsControllerView = UIViewController()
         settingsControllerView.view.backgroundColor = UIColor.rgb(red: 36, green: 36, blue: 36)
         settingsControllerView.navigationItem.title = setting.name.rawValue
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.rgb(red: 192, green: 192, blue: 193)]
-        navigationController?.navigationBar.tintColor = UIColor.rgb(red: 192, green: 192, blue: 193)
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.pushViewController(settingsControllerView, animated: true)
     }
     
@@ -127,20 +129,27 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        scrollWillEndingX = CGFloat(targetContentOffset.pointee.x)
-        let index = scrollWillEndingX / view.frame.width
-        let indexPath = IndexPath(item: Int(index), section: 0)
+        scrollWillEndingX = CGFloat(targetContentOffset.pointee.x) / view.frame.width
+        let indexPath = IndexPath(item: Int(scrollWillEndingX), section: 0)
         
         menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .left)
-        changeTitle(index: Int(index))
+        changeTitle(index: Int(scrollWillEndingX))
     }
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 4
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        return cell
+        let identifier: String
+        
+        if indexPath.item == 1 {
+            identifier = trendingCellId
+        } else if indexPath.item == 2 {
+            identifier = subscriptionCellId
+        }  else {
+            identifier = cellId
+        }
+        return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -152,15 +161,16 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let x = self.scrollX / self.view.frame.width
         coordinator.animate(alongsideTransition: { [unowned self] _ in
             self.collectionView?.collectionViewLayout.invalidateLayout()
-            self.collectionView?.collectionViewLayout.collectionView?.collectionViewLayout.invalidateLayout()
             self.settingsLauncher.collectionView.collectionViewLayout.invalidateLayout()
             self.settingsLauncher.updateSettings()
             self.menuBar.collectionView.collectionViewLayout.invalidateLayout()
-            self.menuBar.updateConstraints(x: x)
+            self.menuBar.horizontalBarLeftAnchorConstraint?.constant = self.view.frame.width * x
         }) { (completion: UIViewControllerTransitionCoordinatorContext) in
             self.scrollX = x * self.view.frame.width
+            self.collectionView?.reloadData()
         }
     }
+
 }
 
 

@@ -15,6 +15,8 @@
 		27B374B520932FB700D92765 /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B374B420932FB700D92765 /* VideoCell.swift */; };
 		27B374B820933DE200D92765 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B374B720933DE200D92765 /* Video.swift */; };
 		27B374BB20935E2400D92765 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B374BA20935E2400D92765 /* Request.swift */; };
+		27F1EB7E2097189C00CC83A8 /* TrendingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F1EB7D2097189C00CC83A8 /* TrendingCell.swift */; };
+		27F1EB8020971D3A00CC83A8 /* SubscriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F1EB7F20971D3A00CC83A8 /* SubscriptionCell.swift */; };
 		57055A1C2094944900708FDF /* SettingsLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57055A1B2094944900708FDF /* SettingsLauncher.swift */; };
 		57055A1E20949E1800708FDF /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57055A1D20949E1800708FDF /* SettingCell.swift */; };
 		57055A202094A61000708FDF /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57055A1F2094A61000708FDF /* Setting.swift */; };
@@ -34,6 +36,8 @@
 		27B374B420932FB700D92765 /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
 		27B374B720933DE200D92765 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		27B374BA20935E2400D92765 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		27F1EB7D2097189C00CC83A8 /* TrendingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingCell.swift; sourceTree = "<group>"; };
+		27F1EB7F20971D3A00CC83A8 /* SubscriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionCell.swift; sourceTree = "<group>"; };
 		57055A1B2094944900708FDF /* SettingsLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLauncher.swift; sourceTree = "<group>"; };
 		57055A1D20949E1800708FDF /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		57055A1F2094A61000708FDF /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
@@ -110,6 +114,8 @@
 				57055A1D20949E1800708FDF /* SettingCell.swift */,
 				576787402095F90D007F8676 /* FeedCell.swift */,
 				576787422095F948007F8676 /* BaseCell.swift */,
+				27F1EB7D2097189C00CC83A8 /* TrendingCell.swift */,
+				27F1EB7F20971D3A00CC83A8 /* SubscriptionCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -204,6 +210,7 @@
 			files = (
 				57055A202094A61000708FDF /* Setting.swift in Sources */,
 				27B374B520932FB700D92765 /* VideoCell.swift in Sources */,
+				27F1EB8020971D3A00CC83A8 /* SubscriptionCell.swift in Sources */,
 				27B374B820933DE200D92765 /* Video.swift in Sources */,
 				27B3749D20932EF000D92765 /* HomeController.swift in Sources */,
 				576787432095F948007F8676 /* BaseCell.swift in Sources */,
@@ -213,6 +220,7 @@
 				27B374B320932FA000D92765 /* MenuBar.swift in Sources */,
 				576787412095F90D007F8676 /* FeedCell.swift in Sources */,
 				27B3749B20932EF000D92765 /* AppDelegate.swift in Sources */,
+				27F1EB7E2097189C00CC83A8 /* TrendingCell.swift in Sources */,
 				57055A1E20949E1800708FDF /* SettingCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,7 +340,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7CT92MF359;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = youtube2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -348,7 +356,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7CT92MF359;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = youtube2/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
