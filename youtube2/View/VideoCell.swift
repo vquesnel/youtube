@@ -16,6 +16,7 @@ class VideoCell: BaseCell {
             let numberFormatter = NumberFormatter()
             numberFormatter.numberStyle = .decimal
             subtitleTextView.text = "\(channelName) - \(numberFormatter.string(from: NSNumber(value: numberOfViews))!) views - 2 years ago"
+            
             guard let profileImageName = video?.channel?.profileImageName else { return }
             RequestService.shared.imageDownloader(url: profileImageName) { image in
                 self.userProfileImageView.image = image

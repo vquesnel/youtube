@@ -75,6 +75,13 @@ class FeedCell : BaseCell, UICollectionViewDataSource, UICollectionViewDelegate,
         return 0
     }
     
-
-
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let videoLauncher = VideoLauncher()
+        videoLauncher.showVideoPlayer()
+    }
+    
+    override func willTransition(from oldLayout: UICollectionViewLayout, to newLayout: UICollectionViewLayout) {
+        super.willTransition(from: oldLayout, to: newLayout)
+        print("DFGDFGDFGDFGDFGDFGDFGDFGDFG")
+    }    
 }
