@@ -10,6 +10,10 @@ import UIKit
 
 class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    let cellId = "cellId"
+    
+    let imageNames = ["home", "trending", "subscriptions", "account"]
+    
     var homeController: HomeController?
     
     lazy var collectionView: UICollectionView = {
@@ -20,13 +24,11 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
         cv.delegate = self
         return cv
     }()
-    let cellId = "cellId"
-    let imageNames = ["home", "trending", "subscriptions", "account"]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        collectionView.register(MenuCell.self, forCellWithReuseIdentifier: "cellId")
+        collectionView.register(MenuCell.self, forCellWithReuseIdentifier: cellId)
         addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         let selectedIndexPath = IndexPath(item: 0, section: 0)
@@ -61,7 +63,7 @@ class MenuBar: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! MenuCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MenuCell
         
         cell.ImageView.image = UIImage(named: imageNames[indexPath.item])?.withRenderingMode(.alwaysTemplate)
         cell.tintColor = UIColor.rgb(red: 135, green: 0, blue: 0)

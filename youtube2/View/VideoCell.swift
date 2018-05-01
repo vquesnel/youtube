@@ -93,6 +93,8 @@ class VideoCell: BaseCell {
     }()
     
     override func setUpViews() {
+        super.setUpViews()
+        
         addSubview(thumbNailImageView)
         addSubview(separtorView)
         addSubview(userProfileImageView)
@@ -109,8 +111,8 @@ class VideoCell: BaseCell {
         loadingWheel.translatesAutoresizingMaskIntoConstraints = false
         
         thumbNailImageView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
-        thumbNailImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        thumbNailImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 26).isActive = true
+        thumbNailImageView.leadingAnchor.constraint(equalTo:  safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        thumbNailImageView.topAnchor.constraint(equalTo:  safeAreaLayoutGuide.topAnchor, constant: 26).isActive = true
         thumbNailImageView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -102).isActive = true
         
         loadingWheel.heightAnchor.constraint(equalToConstant: 20).isActive = true

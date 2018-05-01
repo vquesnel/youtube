@@ -16,4 +16,5 @@ class SubscriptionCell: FeedCell {
         }
         set { }
     }
+    
 }

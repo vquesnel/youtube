@@ -13,6 +13,7 @@ class FeedCell : BaseCell, UICollectionViewDataSource, UICollectionViewDelegate,
     var videos: [Video]?
     
     let cellId = "cellId"
+    
     lazy var width: CGFloat = {
         return frame.width
     }()
@@ -32,7 +33,6 @@ class FeedCell : BaseCell, UICollectionViewDataSource, UICollectionViewDelegate,
     
     override func setUpViews() {
         super.setUpViews()
-
         collectionView.register(VideoCell.self, forCellWithReuseIdentifier: cellId)
         
         addSubview(collectionView)
@@ -65,8 +65,8 @@ class FeedCell : BaseCell, UICollectionViewDataSource, UICollectionViewDelegate,
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let height = (self.width - 32) * 9 / 16
-            return CGSize(width: self.width, height: height + 16 + 8 + 44 + 12 + 36 + 10)
+        let height = (self.width - 32) * 9 / 16
+        return CGSize(width: self.width, height: height + 16 + 8 + 44 + 12 + 36 + 10)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -77,9 +77,4 @@ class FeedCell : BaseCell, UICollectionViewDataSource, UICollectionViewDelegate,
         let videoLauncher = VideoLauncher()
         videoLauncher.showVideoPlayer()
     }
-    
-    override func willTransition(from oldLayout: UICollectionViewLayout, to newLayout: UICollectionViewLayout) {
-        super.willTransition(from: oldLayout, to: newLayout)
-        print("DFGDFGDFGDFGDFGDFGDFGDFGDFG")
-    }    
 }

@@ -11,14 +11,14 @@ import UIKit
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     let cellId = "cellId"
-    
+
     let trendingCellId = "trendingCellId"
     
     let subscriptionCellId = "subscriptionCellId"
     
     let titles = ["Home", "Trending", "Subscriptions", "Account"]
     
-    lazy var menuBar: MenuBar  = {
+    lazy var menuBar: MenuBar = {
         let mb = MenuBar()
         mb.homeController = self
         mb.layer.cornerRadius = 16
@@ -49,7 +49,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         titleLabel.textColor = .white
         titleLabel.font = UIFont.systemFont(ofSize: 20.0)
         navigationItem.titleView = titleLabel
-        navigationController?.hidesBarsOnSwipe = true
         navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.tintColor = .white
@@ -67,6 +66,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         collectionView?.register(TrendingCell.self, forCellWithReuseIdentifier: trendingCellId)
         collectionView?.register(SubscriptionCell.self, forCellWithReuseIdentifier: subscriptionCellId)
         collectionView?.contentInset = UIEdgeInsets(top: 41, left: 0, bottom: 0, right: 0)
+        collectionView?.showsHorizontalScrollIndicator = false
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 41, left: 0, bottom: 0, right: 0)
         collectionView?.isPagingEnabled = true
     }
@@ -101,6 +101,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     @objc func handleMore() {
         settingsLauncher.showSettings()
     }
+    
     
     func scrollToMenuIndex(menuIndex: Int) {
         scrollWillEndingX = CGFloat(menuIndex)
@@ -142,11 +143,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let identifier: String
         
-        if indexPath.item == 1 {
+        switch indexPath.item {
+        case 1:
             identifier = trendingCellId
-        } else if indexPath.item == 2 {
+        case 2:
             identifier = subscriptionCellId
-        }  else {
+        default:
             identifier = cellId
         }
         return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
@@ -161,13 +163,13 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let x = self.scrollX / self.view.frame.width
         coordinator.animate(alongsideTransition: { [unowned self] _ in
             self.collectionView?.collectionViewLayout.invalidateLayout()
+            self.collectionView?.layoutSubviews()
             self.settingsLauncher.collectionView.collectionViewLayout.invalidateLayout()
             self.settingsLauncher.updateSettings()
             self.menuBar.collectionView.collectionViewLayout.invalidateLayout()
             self.menuBar.horizontalBarLeftAnchorConstraint?.constant = self.view.frame.width * x
         }) { (completion: UIViewControllerTransitionCoordinatorContext) in
             self.scrollX = x * self.view.frame.width
-            self.collectionView?.reloadData()
         }
     }
 

@@ -38,7 +38,7 @@ class SettingsLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDe
     
     var homeController: HomeController?
     
-    @objc func showSettings() {
+    func showSettings() {
         guard let window = UIApplication.shared.keyWindow else { return }
         blackBlur.backgroundColor = UIColor(white: 0, alpha: 0.4)
         blackBlur.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
