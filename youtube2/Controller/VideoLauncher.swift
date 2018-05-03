@@ -88,6 +88,7 @@ class VideoPlayerView: UIView {
         setUpGradientLayer()
         
         controlsContainerView.frame = frame
+        controlsContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTouch)))
         
         addSubview(controlsContainerView)
         controlsContainerView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
@@ -159,8 +160,8 @@ class VideoPlayerView: UIView {
         let gradientLayer = CAGradientLayer()
         
         gradientLayer.frame = bounds
-        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.rgb(red: 30, green: 30, blue: 30)]
-        gradientLayer.locations = [0.6, 1.2]
+        gradientLayer.colors = [UIColor.rgb(red: 30, green: 30, blue: 30).cgColor, UIColor.clear.cgColor]
+        gradientLayer.locations = [0.7, 1.2]
         
         controlsContainerView.layer.addSublayer(gradientLayer)
     }
@@ -173,13 +174,29 @@ class VideoPlayerView: UIView {
             PausePlayButton.setImage(UIImage(named: "play"), for: .normal)
             videoStatusView.setImage(UIImage(named: "play"), for: .normal)
         } else {
-            print("handlePause")
             player?.play()
             PausePlayButton.isHidden = true
             videoStatusView.setImage(UIImage(named: "pause"), for: .normal)
+            PausePlayButton.setImage(UIImage(named: "pause"), for: .normal)
+            slider.isHidden = true
+            videoStatusView.isHidden = true
+            PausePlayButton.isHidden = true
+            currentTimeLabel.isHidden = true
+            videoLengthLabel.isHidden = true
         }
         
         isPlaying = !isPlaying
+    }
+    
+    @objc func handleTouch() {
+        print("dfsdfsdfsd")
+        if (slider.isHidden) {
+            slider.isHidden = false
+            videoStatusView.isHidden = false
+            PausePlayButton.isHidden = false
+            currentTimeLabel.isHidden = false
+            videoLengthLabel.isHidden = false
+        }
     }
     
     @objc func handleSliderChange() {
