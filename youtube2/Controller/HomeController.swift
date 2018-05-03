@@ -34,6 +34,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return launcher
     }()
     
+    var videoLauncher: VideoLauncher = {
+        print("sdfsd")
+        let launcher = VideoLauncher()
+        return launcher
+    }()
+    
     var scrollX: CGFloat = {
         return 0
     }()
@@ -119,6 +125,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         navigationController?.pushViewController(settingsControllerView, animated: true)
     }
     
+    func launchVideo() {
+        videoLauncher.showVideoPlayer()
+    }
+    
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollX = scrollView.contentOffset.x / 4
         menuBar.horizontalBarLeftAnchorConstraint?.constant = scrollX 
@@ -151,7 +161,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         default:
             identifier = cellId
         }
-        return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! FeedCell
+        cell.homeController = self
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -163,9 +175,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let x = self.scrollX / self.view.frame.width
         coordinator.animate(alongsideTransition: { [unowned self] _ in
             self.collectionView?.collectionViewLayout.invalidateLayout()
-            self.collectionView?.layoutSubviews()
+            self.collectionView?.setNeedsLayout()
             self.settingsLauncher.collectionView.collectionViewLayout.invalidateLayout()
             self.settingsLauncher.updateSettings()
+            self.videoLauncher.updateSettings()
             self.menuBar.collectionView.collectionViewLayout.invalidateLayout()
             self.menuBar.horizontalBarLeftAnchorConstraint?.constant = self.view.frame.width * x
             self.navigationItem.titleView?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width - 32, height: self.view.frame.height)

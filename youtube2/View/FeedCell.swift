@@ -12,6 +12,8 @@ class FeedCell : BaseCell, UICollectionViewDataSource, UICollectionViewDelegate,
     
     var videos: [Video]?
     
+    var homeController: HomeController?
+    
     let cellId = "cellId"
     
     lazy var width: CGFloat = {
@@ -73,13 +75,12 @@ class FeedCell : BaseCell, UICollectionViewDataSource, UICollectionViewDelegate,
         return 0
     }
     
-    override func layoutSubviews() {
-        print("tototo")
-        self.collectionView.collectionViewLayout.invalidateLayout()
+    override func setNeedsLayout() {
+        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.setNeedsLayout()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let videoLauncher = VideoLauncher()
-        videoLauncher.showVideoPlayer()
+        homeController?.launchVideo()
     }
 }
