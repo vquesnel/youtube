@@ -11,6 +11,8 @@ import AVFoundation
 
 class VideoPlayerView: UIView {
     
+    var VideoLauncherView: UIView?
+    
     let loadingWheel: UIActivityIndicatorView = {
         let lw = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         lw.translatesAutoresizingMaskIntoConstraints = false
@@ -20,6 +22,18 @@ class VideoPlayerView: UIView {
     
     var checker = true
     var isPlaying = false
+    
+    lazy var ExitButton: UIButton = {
+        let button = UIButton(type: .system)
+        let image = UIImage(named: "account")
+        button.setImage(image, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .white
+        button.isHidden = false
+        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(ButtonDown)))
+
+        return button
+    }()
     
     lazy var PausePlayButton: UIButton = {
         let button = UIButton(type: .system)
@@ -80,7 +94,8 @@ class VideoPlayerView: UIView {
     
     var player: AVPlayer?
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, view: UIView) {
+        VideoLauncherView = view
         super.init(frame: frame)
         
         setUpPlayerView()
@@ -127,6 +142,12 @@ class VideoPlayerView: UIView {
         PausePlayButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         PausePlayButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         PausePlayButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        controlsContainerView.addSubview(ExitButton)
+        ExitButton.topAnchor.constraint(equalTo: topAnchor, constant: 50).isActive = true
+        ExitButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
+        ExitButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        ExitButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         backgroundColor = UIColor.rgb(red: 30, green: 30, blue: 30)
     }
@@ -210,6 +231,30 @@ class VideoPlayerView: UIView {
         })
     }
     
+    var initialCenter = CGPoint()
+    
+    @objc func ButtonDown(_ gestureRecognizer : UIPanGestureRecognizer) {
+        guard let keyWindow = UIApplication.shared.keyWindow else {return}
+        // Get the changes in the X and Y directions relative to
+        // the superview's coordinate space.
+        let translation = gestureRecognizer.translation(in: VideoLauncherView?.superview)
+        if gestureRecognizer.state == .began {
+            // Save the view's original position.
+            self.initialCenter = (VideoLauncherView?.center)!
+        }
+        // Update the position for the .began, .changed, and .ended states
+        if gestureRecognizer.state != .cancelled {
+            // Add the X and Y translation to the view's original position.
+            if translation.y > keyWindow.frame.height / 2 {
+//                VideoLauncherView?.frame = CGRect(x: keyWindow.frame.width - 130, y: keyWindow.frame.height - 85, width: 100, height: 56)
+//                self.frame = CGRect(x: keyWindow.frame.width - 130, y: keyWindow.frame.height - 85, width: 100, height: 56)
+                self.bounds = CGRect(x: keyWindow.frame.width - 130, y: keyWindow.frame.height - 85, width: 100, height: 56)
+            }
+        }
+
+    }
+    
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "currentItem.loadedTimeRanges" {
             loadingWheel.stopAnimating()
@@ -247,7 +292,7 @@ class VideoLauncher: NSObject {
         view.frame = CGRect(x: keyWindow.frame.width - 10, y: keyWindow.frame.height - 10, width: 10, height: 10)
         let height = keyWindow.frame.width * 9 / 16
         let videoPlayerFrame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
-        let videoPlayer = VideoPlayerView(frame: videoPlayerFrame)
+        let videoPlayer = VideoPlayerView(frame: videoPlayerFrame, view: view)
         
         view.addSubview(videoPlayer)
         keyWindow.addSubview(view)

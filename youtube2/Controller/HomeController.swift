@@ -168,6 +168,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             self.settingsLauncher.updateSettings()
             self.menuBar.collectionView.collectionViewLayout.invalidateLayout()
             self.menuBar.horizontalBarLeftAnchorConstraint?.constant = self.view.frame.width * x
+            self.navigationItem.titleView?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width - 32, height: self.view.frame.height)
         }) { (completion: UIViewControllerTransitionCoordinatorContext) in
             self.scrollX = x * self.view.frame.width
         }

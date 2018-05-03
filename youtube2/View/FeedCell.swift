@@ -73,6 +73,11 @@ class FeedCell : BaseCell, UICollectionViewDataSource, UICollectionViewDelegate,
         return 0
     }
     
+    override func layoutSubviews() {
+        print("tototo")
+        self.collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let videoLauncher = VideoLauncher()
         videoLauncher.showVideoPlayer()
