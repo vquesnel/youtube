@@ -110,34 +110,34 @@ class VideoCell: BaseCell {
         subtitleTextView.translatesAutoresizingMaskIntoConstraints = false
         loadingWheel.translatesAutoresizingMaskIntoConstraints = false
         
-        thumbNailImageView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
-        thumbNailImageView.leadingAnchor.constraint(equalTo:  safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        thumbNailImageView.topAnchor.constraint(equalTo:  safeAreaLayoutGuide.topAnchor, constant: 26).isActive = true
-        thumbNailImageView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -102).isActive = true
+        thumbNailImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        thumbNailImageView.leadingAnchor.constraint(equalTo:  leadingAnchor, constant: 16).isActive = true
+        thumbNailImageView.topAnchor.constraint(equalTo:  topAnchor, constant: 26).isActive = true
+        thumbNailImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -102).isActive = true
         
         loadingWheel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         loadingWheel.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        loadingWheel.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor).isActive = true
-        loadingWheel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 110).isActive = true
+        loadingWheel.centerXAnchor.constraint(equalTo: thumbNailImageView.centerXAnchor).isActive = true
+        loadingWheel.centerYAnchor.constraint(equalTo: thumbNailImageView.centerYAnchor, constant: -10).isActive = true
         
         userProfileImageView.heightAnchor.constraint(equalToConstant: 44).isActive = true
         userProfileImageView.widthAnchor.constraint(equalToConstant: 44).isActive = true
         userProfileImageView.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 14).isActive = true
-        userProfileImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        userProfileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
         
         titleLabel.leadingAnchor.constraint(equalTo: userProfileImageView.trailingAnchor, constant: 8).isActive = true
         titleLabel.topAnchor.constraint(equalTo: thumbNailImageView.bottomAnchor, constant: 12).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
         titleHeightConstant = titleLabel.heightAnchor.constraint(equalToConstant: 20)
         titleHeightConstant?.isActive = true
         subtitleTextView.leadingAnchor.constraint(equalTo: userProfileImageView.trailingAnchor, constant: 8).isActive = true
         subtitleTextView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4).isActive = true
-        subtitleTextView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        subtitleTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
         subtitleTextView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         separtorView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
         separtorView.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        separtorView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1).isActive = true
+        separtorView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -1).isActive = true
     }
 }
 

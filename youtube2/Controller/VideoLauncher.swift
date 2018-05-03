@@ -11,6 +11,8 @@ import AVFoundation
 
 class VideoPlayerView: UIView {
     
+    var videoLauncherView: UIView?
+    
     let loadingWheel: UIActivityIndicatorView = {
         let lw = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         lw.translatesAutoresizingMaskIntoConstraints = false
@@ -21,6 +23,16 @@ class VideoPlayerView: UIView {
     var checker = true
     var isPlaying = false
     
+    lazy var ExitButton: UIButton = {
+        let button = UIButton(type: .system)
+        let image = UIImage(named: "arrow")
+        button.setImage(image, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .white
+        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(ButtonDown)))
+        return button
+    }()
+    
     lazy var PausePlayButton: UIButton = {
         let button = UIButton(type: .system)
         let image = UIImage(named: "play")
@@ -30,6 +42,14 @@ class VideoPlayerView: UIView {
         button.isHidden = true
         button.addTarget(self, action: #selector(handlePause), for: .touchUpInside)
         return button
+    }()
+    
+    lazy var gradientLayer: CAGradientLayer = {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = self.frame
+        gradientLayer.colors = [UIColor.clear.cgColor, UIColor.rgb(red: 30, green: 30, blue: 30).cgColor]
+        gradientLayer.locations = [0.8, 1.4]
+        return gradientLayer
     }()
     
     let controlsContainerView: UIView = {
@@ -80,12 +100,11 @@ class VideoPlayerView: UIView {
     
     var player: AVPlayer?
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, view: UIView) {
+        videoLauncherView = view
         super.init(frame: frame)
         
         setUpPlayerView()
-        
-        setUpGradientLayer()
         
         controlsContainerView.frame = frame
         controlsContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTouch)))
@@ -128,6 +147,12 @@ class VideoPlayerView: UIView {
         PausePlayButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         PausePlayButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
+        controlsContainerView.addSubview(ExitButton)
+        ExitButton.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        ExitButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 18).isActive = true
+        ExitButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        ExitButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
         backgroundColor = UIColor.rgb(red: 30, green: 30, blue: 30)
     }
 
@@ -154,16 +179,18 @@ class VideoPlayerView: UIView {
             let durationSeconds = CMTimeGetSeconds(duration)
             self.slider.value = Float(seconds / durationSeconds)
         })
-    }
-    
-    private func setUpGradientLayer() {
-        let gradientLayer = CAGradientLayer()
-        
-        gradientLayer.frame = bounds
-        gradientLayer.colors = [UIColor.rgb(red: 30, green: 30, blue: 30).cgColor, UIColor.clear.cgColor]
-        gradientLayer.locations = [0.7, 1.2]
-        
-        controlsContainerView.layer.addSublayer(gradientLayer)
+        let intervalDisplay = CMTime(value: 10, timescale: 2)
+        player?.addPeriodicTimeObserver(forInterval: intervalDisplay, queue: DispatchQueue.main, using: { (progressTime) in
+            if (!self.slider.isHidden) {
+                self.gradientLayer.removeFromSuperlayer()
+                self.slider.isHidden = !self.slider.isHidden
+                self.videoStatusView.isHidden = !self.videoStatusView.isHidden
+                self.self.PausePlayButton.isHidden = !self.PausePlayButton.isHidden
+                self.self.currentTimeLabel.isHidden = !self.currentTimeLabel.isHidden
+                self.self.videoLengthLabel.isHidden = !self.videoLengthLabel.isHidden
+                self.ExitButton.isHidden = !self.ExitButton.isHidden
+            }
+        })
     }
     
     @objc func handlePause() {
@@ -173,9 +200,9 @@ class VideoPlayerView: UIView {
             PausePlayButton.isHidden = false
             PausePlayButton.setImage(UIImage(named: "play"), for: .normal)
             videoStatusView.setImage(UIImage(named: "play"), for: .normal)
+            ExitButton.isHidden = false
         } else {
             player?.play()
-            PausePlayButton.isHidden = true
             videoStatusView.setImage(UIImage(named: "pause"), for: .normal)
             PausePlayButton.setImage(UIImage(named: "pause"), for: .normal)
             slider.isHidden = true
@@ -183,20 +210,25 @@ class VideoPlayerView: UIView {
             PausePlayButton.isHidden = true
             currentTimeLabel.isHidden = true
             videoLengthLabel.isHidden = true
+            ExitButton.isHidden = true
         }
         
         isPlaying = !isPlaying
     }
     
     @objc func handleTouch() {
-        print("dfsdfsdfsd")
         if (slider.isHidden) {
-            slider.isHidden = false
-            videoStatusView.isHidden = false
-            PausePlayButton.isHidden = false
-            currentTimeLabel.isHidden = false
-            videoLengthLabel.isHidden = false
+            controlsContainerView.layer.addSublayer(gradientLayer)
         }
+        else {
+            gradientLayer.removeFromSuperlayer()
+        }
+        slider.isHidden = !slider.isHidden
+        videoStatusView.isHidden = !videoStatusView.isHidden
+        PausePlayButton.isHidden = !PausePlayButton.isHidden
+        currentTimeLabel.isHidden = !currentTimeLabel.isHidden
+        videoLengthLabel.isHidden = !videoLengthLabel.isHidden
+        ExitButton.isHidden = !ExitButton.isHidden
     }
     
     @objc func handleSliderChange() {
@@ -210,6 +242,39 @@ class VideoPlayerView: UIView {
         })
     }
     
+    var initialCenter = CGPoint()
+    
+    @objc func ButtonDown(_ gestureRecognizer : UIPanGestureRecognizer) {
+        guard let keyWindow = UIApplication.shared.keyWindow else {return}
+        let translation = gestureRecognizer.translation(in: videoLauncherView?.superview)
+        if gestureRecognizer.state == .began {
+            self.initialCenter = (videoLauncherView?.center)!
+        }
+        if gestureRecognizer.state != .cancelled {
+            if translation.y > keyWindow.frame.height / 2 {
+                slider.removeFromSuperview()
+                videoStatusView.removeFromSuperview()
+                PausePlayButton.removeFromSuperview()
+                currentTimeLabel.removeFromSuperview()
+                videoLengthLabel.removeFromSuperview()
+                player?.seek(to: CMTimeMake(0, 1))
+                player?.pause()
+                UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                    self.videoLauncherView?.frame = CGRect(x: keyWindow.frame.width - 10, y: keyWindow.frame.height - 10, width: 10, height: 10)
+                }, completion: { _ in
+                    self.videoLauncherView?.removeFromSuperview()
+                })
+            }
+        }
+
+    }
+
+    override func setNeedsLayout() {
+        super.setNeedsLayout()
+        controlsContainerView.setNeedsLayout()
+        self.layer.setNeedsLayout()
+    }
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "currentItem.loadedTimeRanges" {
             loadingWheel.stopAnimating()
@@ -217,7 +282,9 @@ class VideoPlayerView: UIView {
                 PausePlayButton.isHidden = false
                 checker = false
             }
-            PausePlayButton.setImage(UIImage(named: "play"), for: .normal)
+            if (isPlaying) {
+                PausePlayButton.setImage(UIImage(named: "pause"), for: .normal)
+            }
             guard let duration = player?.currentItem?.duration else {
                 return
             }
@@ -236,44 +303,55 @@ class VideoPlayerView: UIView {
 
 class VideoLauncher: NSObject {
     
-    var isDisplay = false
-
+    var homeController: HomeController?
+    var view: UIView?
+    var videoPlayer: VideoPlayerView?
+    
     func showVideoPlayer(){
         guard let keyWindow = UIApplication.shared.keyWindow else {return}
+        view = UIView(frame: keyWindow.frame)
         
-        let view = UIView(frame: keyWindow.frame)
-        
+        guard let view = view else { return }
         view.backgroundColor = UIColor.rgb(red: 36, green: 36, blue: 36)
         view.frame = CGRect(x: keyWindow.frame.width - 10, y: keyWindow.frame.height - 10, width: 10, height: 10)
-        let height = keyWindow.frame.width * 9 / 16
-        let videoPlayerFrame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
-        let videoPlayer = VideoPlayerView(frame: videoPlayerFrame)
         
+        var height = keyWindow.frame.height
+        if (height > keyWindow.frame.width) {
+            height = keyWindow.frame.width * 9 / 16
+        }
+        let videoPlayerFrame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
+        videoPlayer = VideoPlayerView(frame: videoPlayerFrame, view: view)
+        
+        guard let videoPlayer = videoPlayer else { return }
         view.addSubview(videoPlayer)
         keyWindow.addSubview(view)
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            view.frame = keyWindow.frame
+            self.view?.frame = keyWindow.frame
         }, completion: { _ in
             UIApplication.shared.isStatusBarHidden = true
         })
-        
     }
-//
-//    func updateSettings() {
-//        guard let keyWindow = UIApplication.shared.keyWindow else { return }
-//
-//        view.frame = keyWindow.frame
-//        view.backgroundColor = .blue// UIColor.rgb(red: 36, green: 36, blue: 36)
-//        view.frame = isDisplay ? CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: keyWindow.frame.height)
-//            : CGRect(x: keyWindow.frame.width - 10, y: keyWindow.frame.height - 10, width: 10, height: 10)
-//        var height = keyWindow.frame.height - 10
-//        if keyWindow.frame.width < keyWindow.frame.height {
-//
-//            height = keyWindow.frame.width * 9 / 16
-//        }
-//        videoPlayer.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
-//        view.addSubview(self.videoPlayer)
-//        keyWindow.addSubview(self.view)
-//    }
+
+    func updateSettings() {
+        guard let view = view  else { return }
+        if (view.superview != nil) {
+            print("sdfsdfsdF")
+            guard let keyWindow = UIApplication.shared.keyWindow else { return }
+            guard let player = videoPlayer else { return }
+            view.frame = keyWindow.frame
+            view.backgroundColor = UIColor.rgb(red: 36, green: 36, blue: 36)
+            view.frame = view.superview != nil ? CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: keyWindow.frame.height)
+            : CGRect(x: keyWindow.frame.width - 10, y: keyWindow.frame.height - 10, width: 10, height: 10)
+            var height = keyWindow.frame.height - 10
+            if keyWindow.frame.width < keyWindow.frame.height {
+                height = keyWindow.frame.width * 9 / 16
+            }
+            view.frame = keyWindow.frame
+            videoPlayer?.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
+            videoPlayer?.setNeedsLayout()
+            view.addSubview(player)
+            keyWindow.addSubview(view)
+        }
+    }
 }
